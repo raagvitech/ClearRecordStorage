@@ -1,0 +1,155 @@
+<template>
+    <lightning-card>
+   <div class="slds-m-around_medium">
+    <div class="slds-clearfix">
+        <div class="slds-float_left">
+            <lightning-icon icon-name="utility:warning" alternative-text="Warning!" title="Warning"></lightning-icon> 
+             
+           <b>Clear Storage</b> 
+        
+        </div>
+        
+        <div class="slds-float_right">
+            <lightning-button variant="brand" label="Start" title="Primary action" onclick={handleClick} ></lightning-button>
+        </div>`
+    </div>
+   </div>
+
+
+
+<!-- Modal content -->
+<template if:true={isModal}>
+
+    <template if:true={dataValue}>
+      
+        <template for:each={dataValue} for:item="item">
+            
+            <div class="slds-grid" key={item.id} style="background-color: green;">
+            
+            <div class="slds-col">
+                <span>
+                    {item.objectAPiName__c}
+                </span>
+            </div>
+
+            <div class="slds-col">
+                <span>
+                    {item.TotalJobItems__c}
+                </span>
+            </div>
+
+            <div class="slds-col">
+                <span>
+                    {item.JobItemsProcessed__c}
+                </span>
+            </div>
+
+            <div class="slds-col">
+                <span>
+                    {item.Status__c}
+                </span>
+            </div>
+                    
+            </div>
+        </template>
+    
+        
+      </template>
+
+<!-- Container to display object information -->
+    <template if:true={openPopUp}>
+        <div class="slds-grid" data-id="colourChange">
+    
+
+            <div class="slds-col">
+                <span>{objectAPiName}</span>
+            </div>
+            
+            
+            <div class="slds-col">
+                <span>{TotalJobItems}</span>
+            </div>
+            
+        
+            <div class="slds-col">
+                <span>{JobItemsProcessed}</span>
+            </div>
+        
+            
+            <div class="slds-col">
+                <span>{Status}</span>
+            </div>
+        </div>
+    </template>
+ </template>
+
+
+ 
+    </lightning-card>
+
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-scrollable_none slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <!-- <span class="slds-assistive-text">Close</span> -->
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select object to clear storage</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-scrollable_none slds-p-around_medium " id="modal-content-id-1">
+                    <div class=" slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                        <div class="slds-combobox__form-element" role="none">
+                            <lightning-Input type="search" placeholder="Search..." onchange={handleSearch} value={searchKey}></lightning-input>
+                        </div>
+                    </div>
+          
+                    <div>
+                        <template for:each={selectedSObject} for:item="pillItem" for:index="index">               
+                            <lightning-pill label={pillItem} onremove={handleRemoveSelectedObject} key={pillItem} name={index}></lightning-pill>
+                        </template>
+                    </div>
+
+                   <div class="slds-modal__content slds-p-around_medium modal-content-id-1 slds-form-element__control slds-input-has-icon slds-input-has-icon slds-scrollable_y">
+                     <lightning-layout>
+                        <lightning-layout-item>
+                            <template if:true={openData}>
+                                <template for:each={selectRecord} for:item="objectitem">
+                                    <div key={objectitem.Id}>
+                                        <table class="slds-table slds-table_cell-buffer slds-table_col-bordered">
+                                            <tbody>
+                                            <tr>
+                                             <td><lightning-formatted-text onclick={handleSelectedObject} value={objectitem} class="pointer">{objectitem}</lightning-formatted-text> </td> 
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:true={selectedSearchKey}>
+                                <lightning-button label="Select" onclick={selectSearchKey}></lightning-button>
+                            </template>
+
+                        </lightning-layout-item>
+                     </lightning-layout>
+                 </div> 
+                                 
+
+                </div>
+
+
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleClose}>clear</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
